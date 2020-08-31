@@ -16,12 +16,12 @@ class AppStarted extends AuthenticationEvent {}
 ///
 /// It will notify the bloc that the user has successfully logged in.
 class LoggedIn extends AuthenticationEvent {
-  final String token;
+  final AuthenticationModel tokens;
 
-  LoggedIn({@required this.token}) : super([token]);
+  LoggedIn({@required this.tokens}) : super([tokens]);
 
   @override
-  List<Object> get props => [token];
+  List<Object> get props => [tokens];
 }
 
 /// Will be dispatched on a successful logout.

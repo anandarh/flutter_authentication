@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_authentication/blocs/authentication/authentication_bloc.dart';
 import 'package:flutter_authentication/blocs/login/login_bloc.dart';
 import 'package:flutter_authentication/repositories/authentication_repository.dart';
-import 'package:flutter_authentication/utilities/FieldFocusChange.dart';
+import 'package:flutter_authentication/utils/FieldFocusChange.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -12,17 +12,17 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
-  LoginBloc _loginBloc;
-  AuthenticationBloc _authenticationBloc;
+  LoginBloc loginBloc;
+  AuthenticationBloc authenticationBloc;
 
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _emailFocus = FocusNode();
-  final _passwordFocus = FocusNode();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final emailFocus = FocusNode();
+  final passwordFocus = FocusNode();
 
   @override
   void initState() {
-    _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     super.initState();
   }
 
@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: BlocProvider(
-          create: (context) => _loginBloc = LoginBloc(authRepository: AuthenticationRepository(), authBloc: _authenticationBloc),
+          create: (context) => loginBloc = LoginBloc(authRepository: AuthenticationRepository(), authBloc: authenticationBloc),
           child: BlocBuilder<LoginBloc, LoginState>(
             builder: (context, state) {
 
@@ -73,10 +73,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     /// Username EditText section
                     TextFormField(
-                      controller: _emailController,
+                      controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
-                      focusNode: _emailFocus,
+                      focusNode: emailFocus,
                       decoration: InputDecoration(
                         labelText: "Email",
                         labelStyle: TextStyle(color: Colors.black54),
@@ -98,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                       },
                       onFieldSubmitted: (val) {
-                        FieldFocusChange(context, _emailFocus, _passwordFocus);
+                        FieldFocusChange(context, emailFocus, passwordFocus);
                       },
                     ),
 
@@ -106,9 +106,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     /// Password EditText section
                     TextFormField(
-                      controller: _passwordController,
+                      controller: passwordController,
                       textInputAction: TextInputAction.done,
-                      focusNode: _passwordFocus,
+                      focusNode: passwordFocus,
                       decoration: InputDecoration(
                         labelText: "Password",
                         labelStyle: TextStyle(color: Colors.black54),
@@ -171,9 +171,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _onLoginButtonPressed() {
-    _loginBloc.add(LoginButtonPressed(
-      email: _emailController.text,
-      password: _passwordController.text,
+    loginBloc.add(LoginButtonPressed(
+      email: emailController.text,
+      password: passwordController.text,
     ));
   }
 

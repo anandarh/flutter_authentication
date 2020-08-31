@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_authentication/models/authentication_model.dart';
 import 'package:flutter_authentication/repositories/authentication_repository.dart';
 import 'package:meta/meta.dart';
 
@@ -18,7 +19,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     AuthenticationEvent event,
   ) async* {
     if (event is AppStarted) {
-      final bool hasToken = await authRepository.hasToken();
+      final bool hasToken = await authRepository.hasTokens();
 
       if (hasToken) {
         yield AuthenticationAuthenticated();
@@ -29,13 +30,13 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
     if (event is LoggedIn) {
       yield AuthenticationLoading();
-      await authRepository.persistToken(event.token);
+      await authRepository.persistTokens(event.tokens);
       yield AuthenticationAuthenticated();
     }
 
     if (event is LoggedOut) {
       yield AuthenticationLoading();
-      await authRepository.deleteToken();
+      await authRepository.deleteTokens();
       yield AuthenticationUnauthenticated();
     }
 
